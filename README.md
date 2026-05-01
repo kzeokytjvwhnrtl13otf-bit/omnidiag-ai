@@ -110,7 +110,7 @@ graph TB
 ### Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/omnidiag-ai.git
+git clone https://github.com/kzeokytjvwhnrtl13otf-bit/omnidiag-ai.git
 cd omnidiag-ai
 pip install -r requirements.txt
 cp .env.example .env
@@ -257,5 +257,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ---
 
 <p align="center">
-  <sub>Built with 🧠 by the OmniDiag Team • Powered by <a href="https://xiaomimimo.com">Xiaomi MiMo</a></sub>
+  <sub>Built with 🧠 by H.Y. • Powered by <a href="https://xiaomimimo.com">Xiaomi MiMo</a></sub>
 </p>
