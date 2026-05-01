@@ -1,0 +1,52 @@
+{
+    "known_issues": [
+        {
+            "id": "INTEL-VMIN-SHIFT-001",
+            "title": "Intel 13th/14th Gen Raptor Lake CPU Vmin Shift Degradation",
+            "affected": ["i5-13600K", "i5-13600KF", "i7-13700K", "i9-13900K", "i5-14600K", "i7-14700K", "i9-14900K"],
+            "symptoms": [
+                "Frequent WHEA_UNCORRECTABLE_ERROR (0x124) BSODs under moderate load",
+                "System instability that worsens over time",
+                "Random reboots during gaming or compilation",
+                "Kernel-Power Event 41 with non-zero BugcheckCode"
+            ],
+            "root_cause": "Intel acknowledged elevated voltage requests causing permanent silicon degradation. The CPU requires progressively higher voltage to maintain stability.",
+            "remediation": [
+                "Update to latest BIOS with Intel Default Settings microcode (0x125+)",
+                "Apply Intel Baseline Profile (disables eTVB, limits PL2)",
+                "Set manual Vcore offset +0.02-0.05V as temporary workaround",
+                "Contact Intel for RMA/replacement under extended warranty program"
+            ],
+            "references": [
+                "Intel Community Advisory: intel.com/content/www/us/en/support/articles/000100100",
+                "Intel Baseline Profile Guide"
+            ],
+            "severity": "critical",
+            "discovered": "2024-07",
+            "last_verified": "2026-04"
+        },
+        {
+            "id": "VMWARE-HYPER-V-CONFLICT-001",
+            "title": "VMware Workstation and Hyper-V Coexistence Causing System Freezes",
+            "affected": ["Windows 10/11 with VMware Workstation 17+", "Systems with WSL2 enabled"],
+            "symptoms": [
+                "Complete system freeze (no BSOD, requires hard reset)",
+                "Black screen with cursor after resume from sleep",
+                "High DPC latency spikes when VM is running"
+            ],
+            "root_cause": "VMware WHP mode (required when Hyper-V is active) introduces additional virtualization overhead that can conflict with certain GPU drivers and cause DPC watchdog violations.",
+            "remediation": [
+                "Disable Hyper-V: bcdedit /set hypervisorlaunchtype off",
+                "Disable VMware services when not in use",
+                "Update GPU drivers to latest stable version",
+                "Disable Device Guard / Credential Guard if not required"
+            ],
+            "severity": "high",
+            "discovered": "2025-03",
+            "last_verified": "2026-04"
+        }
+    ],
+    "source": "OmniDiag Incident Knowledge Base",
+    "version": "1.1.0",
+    "last_updated": "2026-04-28"
+}

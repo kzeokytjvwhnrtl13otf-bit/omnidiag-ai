@@ -1,0 +1,43 @@
+{
+    "bugcheck_codes": {
+        "0x0000001E": {
+            "name": "KMODE_EXCEPTION_NOT_HANDLED",
+            "description": "Kernel-mode program generated an exception the error handler did not catch."
+        },
+        "0x0000003B": {
+            "name": "SYSTEM_SERVICE_EXCEPTION",
+            "description": "An exception happened while executing a routine that transitions from non-privileged to privileged code."
+        },
+        "0x0000007E": {
+            "name": "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED",
+            "description": "A system thread generated an exception that the error handler did not catch."
+        },
+        "0x0000009F": {
+            "name": "DRIVER_POWER_STATE_FAILURE",
+            "description": "A driver is in an inconsistent or invalid power state."
+        },
+        "0x000000C2": {
+            "name": "BAD_POOL_CALLER",
+            "description": "The current thread is making a bad pool request."
+        },
+        "0x000000D1": {
+            "name": "DRIVER_IRQL_NOT_LESS_OR_EQUAL",
+            "description": "A kernel-mode driver attempted to access pageable memory at DISPATCH_LEVEL or above."
+        },
+        "0x00000124": {
+            "name": "WHEA_UNCORRECTABLE_ERROR",
+            "description": "A fatal hardware error condition was detected by the Windows Hardware Error Architecture."
+        },
+        "0x0000013A": {
+            "name": "KERNEL_MODE_HEAP_CORRUPTION",
+            "description": "The kernel mode heap manager has detected corruption in a heap."
+        },
+        "0x00000154": {
+            "name": "UNEXPECTED_STORE_EXCEPTION",
+            "description": "A store component caught an unexpected exception."
+        }
+    },
+    "source": "Microsoft Windows BugCheck Reference (docs.microsoft.com)",
+    "version": "1.0.0",
+    "last_updated": "2026-04-28"
+}

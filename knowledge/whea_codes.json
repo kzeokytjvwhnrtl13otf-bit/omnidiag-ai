@@ -1,0 +1,58 @@
+{
+    "whea_errors": {
+        "0x124": {
+            "name": "WHEA_UNCORRECTABLE_ERROR",
+            "description": "A fatal hardware error has occurred. Usually CPU, memory, or PCIe related.",
+            "common_causes": [
+                "CPU voltage instability (Vmin Shift on Intel 13th/14th gen)",
+                "Memory timing too aggressive (XMP profile issues)",
+                "PCIe device malfunction (GPU, NVMe)",
+                "Overheating causing thermal throttle failures"
+            ],
+            "remediation": [
+                "Check CPU microcode version — apply latest Intel update",
+                "Disable XMP and test with JEDEC memory speeds",
+                "Run Prime95 Small FFTs for 30 minutes to stress-test CPU",
+                "Check Event Viewer for WHEA-Logger events with error source details"
+            ]
+        },
+        "0x9C": {
+            "name": "MACHINE_CHECK_EXCEPTION",
+            "description": "CPU detected an unrecoverable hardware error during execution.",
+            "common_causes": [
+                "CPU silicon degradation",
+                "Insufficient CPU core voltage under load",
+                "Faulty motherboard VRM"
+            ],
+            "remediation": [
+                "Increase Vcore by +0.02V increments",
+                "Reduce CPU boost clock multiplier",
+                "Contact manufacturer for RMA if persistent"
+            ]
+        },
+        "0xD1": {
+            "name": "DRIVER_IRQL_NOT_LESS_OR_EQUAL",
+            "description": "A kernel-mode driver attempted to access pageable memory at too high an IRQL.",
+            "common_causes": [
+                "Outdated or corrupted device driver",
+                "Anti-cheat kernel driver conflict (Vanguard, EAC, BattlEye)",
+                "VPN or firewall filter driver issue"
+            ],
+            "remediation": [
+                "Identify the faulting driver from the dump file",
+                "Update or roll back the identified driver",
+                "Disable conflicting filter drivers and test"
+            ]
+        }
+    },
+    "kernel_power_events": {
+        "41": {
+            "description": "Unexpected shutdown/reboot — no clean shutdown was initiated",
+            "severity": "critical",
+            "analysis_notes": "Check BugcheckCode parameter: 0=power loss, non-zero=BSOD crash code"
+        }
+    },
+    "source": "Microsoft WHEA Documentation + Community Knowledge Base",
+    "version": "1.2.0",
+    "last_updated": "2026-04-28"
+}
