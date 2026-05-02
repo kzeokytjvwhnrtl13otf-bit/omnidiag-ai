@@ -55,7 +55,7 @@
   "auto_fix_script": null,
   "metadata": {
     "probe": "health_check",
-    "model": "gpt-4o",
+    "model": "deepseek-v4-flash",
     "generated_at": "2026-04-28T14:30:22+08:00",
     "input_tokens": 14250,
     "output_tokens": 985,
