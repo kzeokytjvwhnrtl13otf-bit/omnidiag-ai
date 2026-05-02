@@ -1,43 +1,79 @@
 {
-    "bugcheck_codes": {
-        "0x0000001E": {
-            "name": "KMODE_EXCEPTION_NOT_HANDLED",
-            "description": "Kernel-mode program generated an exception the error handler did not catch."
-        },
-        "0x0000003B": {
-            "name": "SYSTEM_SERVICE_EXCEPTION",
-            "description": "An exception happened while executing a routine that transitions from non-privileged to privileged code."
-        },
-        "0x0000007E": {
-            "name": "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED",
-            "description": "A system thread generated an exception that the error handler did not catch."
-        },
-        "0x0000009F": {
-            "name": "DRIVER_POWER_STATE_FAILURE",
-            "description": "A driver is in an inconsistent or invalid power state."
-        },
-        "0x000000C2": {
-            "name": "BAD_POOL_CALLER",
-            "description": "The current thread is making a bad pool request."
-        },
-        "0x000000D1": {
-            "name": "DRIVER_IRQL_NOT_LESS_OR_EQUAL",
-            "description": "A kernel-mode driver attempted to access pageable memory at DISPATCH_LEVEL or above."
-        },
-        "0x00000124": {
-            "name": "WHEA_UNCORRECTABLE_ERROR",
-            "description": "A fatal hardware error condition was detected by the Windows Hardware Error Architecture."
-        },
-        "0x0000013A": {
-            "name": "KERNEL_MODE_HEAP_CORRUPTION",
-            "description": "The kernel mode heap manager has detected corruption in a heap."
-        },
-        "0x00000154": {
-            "name": "UNEXPECTED_STORE_EXCEPTION",
-            "description": "A store component caught an unexpected exception."
-        }
+  "bugcheck_codes": {
+    "0x0000001E": {
+      "name": "KMODE_EXCEPTION_NOT_HANDLED",
+      "description": "A kernel-mode program generated an exception that the error handler did not catch. Often caused by buggy drivers or hardware issues.",
+      "common_causes": ["Corrupt or outdated device drivers", "Faulty RAM", "Software conflict"],
+      "first_steps": ["Run Driver Verifier", "Check Event ID 1001 in System log", "Run memory diagnostics"]
     },
-    "source": "Microsoft Windows BugCheck Reference (docs.microsoft.com)",
-    "version": "1.0.0",
-    "last_updated": "2026-04-28"
+    "0x0000003B": {
+      "name": "SYSTEM_SERVICE_EXCEPTION",
+      "description": "An exception occurred while executing a routine transitioning from non-privileged to privileged code. Frequently driver-related.",
+      "common_causes": ["Third-party driver bug", "Corrupted system files", "Antivirus conflict"],
+      "first_steps": ["Update all drivers", "Run SFC /scannow", "Boot into Safe Mode to isolate"]
+    },
+    "0x0000007E": {
+      "name": "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED",
+      "description": "A system thread generated an unhandled exception. Often related to driver incompatibility.",
+      "common_causes": ["Incompatible driver", "Outdated BIOS/firmware", "Hardware failure"],
+      "first_steps": ["Identify faulting driver from minidump", "Update BIOS", "Run hardware diagnostics"]
+    },
+    "0x0000009F": {
+      "name": "DRIVER_POWER_STATE_FAILURE",
+      "description": "A driver is in an inconsistent or invalid power state during system power transitions (sleep/hibernate/shutdown).",
+      "common_causes": ["USB device driver issue", "Network adapter power management", "Outdated chipset driver"],
+      "first_steps": ["Disable USB selective suspend", "Update chipset and network drivers", "Check power management settings"]
+    },
+    "0x000000C2": {
+      "name": "BAD_POOL_CALLER",
+      "description": "The current thread made an incorrect pool memory allocation request.",
+      "common_causes": ["Malware infection", "Corrupt driver", "Damaged system files"],
+      "first_steps": ["Run full malware scan", "Enable Driver Verifier", "Run DISM /RestoreHealth"]
+    },
+    "0x000000D1": {
+      "name": "DRIVER_IRQL_NOT_LESS_OR_EQUAL",
+      "description": "A kernel-mode driver attempted to access pageable memory at an elevated IRQL level.",
+      "common_causes": ["Network driver bug", "Antivirus driver conflict", "Recently installed driver"],
+      "first_steps": ["Roll back recently installed drivers", "Disable third-party antivirus temporarily", "Use Driver Verifier to isolate"]
+    },
+    "0x00000124": {
+      "name": "WHEA_UNCORRECTABLE_ERROR",
+      "description": "A fatal hardware error was detected by the Windows Hardware Error Architecture (WHEA). Indicates hardware-level failure.",
+      "common_causes": ["CPU instability (overclocking, Vmin shift)", "Faulty RAM", "Motherboard hardware error", "Power supply instability"],
+      "first_steps": ["Check WHEA event log for specific error source", "Run MemTest86", "Reset BIOS to defaults", "Test with stock CPU settings"]
+    },
+    "0x0000013A": {
+      "name": "KERNEL_MODE_HEAP_CORRUPTION",
+      "description": "The kernel heap manager detected corruption in a heap.",
+      "common_causes": ["Driver memory bug", "Hardware memory fault", "Malware"],
+      "first_steps": ["Run Driver Verifier with heap validation", "Run memory diagnostics", "Scan for malware"]
+    },
+    "0x00000154": {
+      "name": "UNEXPECTED_STORE_EXCEPTION",
+      "description": "A store component (typically storage driver or file system) caught an unexpected exception.",
+      "common_causes": ["Failing SSD/HDD", "Corrupt file system", "Storage driver bug"],
+      "first_steps": ["Run CHKDSK /f /r", "Check SMART data for drive health", "Update storage controller driver"]
+    },
+    "0x0000007F": {
+      "name": "UNEXPECTED_KERNEL_MODE_TRAP",
+      "description": "A trap was generated in kernel mode that the kernel failed to catch. Often indicates hardware failure.",
+      "common_causes": ["CPU hardware failure", "Incompatible RAM", "BIOS bug"],
+      "first_steps": ["Test RAM individually", "Update BIOS", "Test CPU with stress tools"]
+    },
+    "0x000000EF": {
+      "name": "CRITICAL_PROCESS_DIED",
+      "description": "A critical system process terminated unexpectedly.",
+      "common_causes": ["Corrupt system files", "Malware targeting system processes", "Windows Update failure"],
+      "first_steps": ["Run SFC /scannow", "Run DISM /RestoreHealth", "Check for malware"]
+    },
+    "0x00000050": {
+      "name": "PAGE_FAULT_IN_NONPAGED_AREA",
+      "description": "System tried to access a page of memory that wasn't present in physical memory.",
+      "common_causes": ["Faulty RAM", "Corrupt driver", "Virus/malware"],
+      "first_steps": ["Run Windows Memory Diagnostic", "Boot from safe mode to test", "Check for malware"]
+    }
+  },
+  "source": "Microsoft Windows BugCheck Reference (docs.microsoft.com)",
+  "version": "2.0.0",
+  "last_updated": "2026-04-28"
 }
