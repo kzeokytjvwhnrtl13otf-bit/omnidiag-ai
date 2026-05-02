@@ -23,11 +23,11 @@ if _env_path.exists():
 class Config:
     """Application configuration."""
 
-    # MiMo API
-    mimo_api_base: str = os.getenv("MIMO_API_BASE", "https://api.xiaomimimo.com/v1")
-    mimo_api_key: str = os.getenv("MIMO_API_KEY", "")
-    mimo_model: str = os.getenv("MIMO_MODEL", "mimo-v2.5-pro")
-    mimo_max_tokens: int = int(os.getenv("MIMO_MAX_TOKENS", "8192"))
+    # LLM API (OpenAI-compatible endpoint)
+    llm_api_base: str = os.getenv("LLM_API_BASE", "https://api.openai.com/v1")
+    llm_api_key: str = os.getenv("LLM_API_KEY", "")
+    llm_model: str = os.getenv("LLM_MODEL", "gpt-4o")
+    llm_max_tokens: int = int(os.getenv("LLM_MAX_TOKENS", "8192"))
 
     # Probe settings
     probe_timeout: int = int(os.getenv("PROBE_TIMEOUT", "120"))
@@ -44,10 +44,10 @@ class Config:
     def validate(self) -> list[str]:
         """Validate configuration and return list of issues."""
         issues = []
-        if not self.mimo_api_key:
-            issues.append("MIMO_API_KEY is not set")
-        if self.mimo_max_tokens < 1024:
-            issues.append("MIMO_MAX_TOKENS should be at least 1024")
+        if not self.llm_api_key:
+            issues.append("LLM_API_KEY is not set")
+        if self.llm_max_tokens < 1024:
+            issues.append("LLM_MAX_TOKENS should be at least 1024")
         return issues
 
 

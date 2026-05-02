@@ -20,7 +20,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.10+-blue?logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/powershell-7.0+-5391FE?logo=powershell&logoColor=white" />
-  <img src="https://img.shields.io/badge/LLM-Xiaomi%20MiMo-orange?logo=xiaomi&logoColor=white" />
+  <img src="https://img.shields.io/badge/LLM-OpenAI%20Compatible-orange?logo=openai&logoColor=white" />
   <img src="https://img.shields.io/badge/license-MIT-green" />
   <img src="https://img.shields.io/badge/status-Active%20Development-brightgreen" />
 </p>
@@ -29,7 +29,7 @@
 
 ## ❓ The Problem
 
-When enterprise servers or developer workstations encounter **kernel-level crashes** (BSOD, WHEA errors, CPU Vmin shift degradation), traditional monitoring tools can only surface error codes. Engineers must then manually sift through **tens of thousands of lines** of Event Viewer logs, Minidump snapshots, and hardware telemetry data — a process that can take hours or even days.
+When enterprise servers or developer workstations encounter **kernel-level crashes** (BSOD, WHEA errors, driver conflicts, hardware degradation), traditional monitoring tools can only surface error codes. Engineers must then manually sift through **tens of thousands of lines** of Event Viewer logs, Minidump snapshots, and hardware telemetry data — a process that can take hours or even days.
 
 **OmniDiag AI** closes this gap by combining **deep OS-level diagnostic probes** with the **long-context reasoning capabilities of large language models** to deliver automated root-cause analysis and generate executable remediation scripts — in seconds, not hours.
 
@@ -69,7 +69,7 @@ graph TB
     end
 
     subgraph LLM ["🧠 LLM Backend"]
-        MIMO[Xiaomi MiMo API<br/>Long Context Reasoning]
+        LLM_API[OpenAI-Compatible API<br/>Long Context Reasoning]
     end
 
     subgraph Output ["📤 Output"]
@@ -86,7 +86,7 @@ graph TB
     COLL --> NORM
     NORM --> AGENT
     RAG --> AGENT
-    AGENT <--> MIMO
+    AGENT <--> LLM_API
     AGENT --> REPORT
     AGENT --> FIX
     AGENT --> ALERT
@@ -105,7 +105,7 @@ graph TB
 
 - Python 3.10+
 - PowerShell 5.1+ (Windows built-in) or PowerShell 7+ (cross-platform)
-- Xiaomi MiMo API Key ([Get one here](https://xiaomimimo.com))
+- Any OpenAI-compatible LLM API key (supports OpenAI, DeepSeek, Qwen, MiMo, and more)
 
 ### Installation
 
@@ -114,7 +114,7 @@ git clone https://github.com/kzeokytjvwhnrtl13otf-bit/omnidiag-ai.git
 cd omnidiag-ai
 pip install -r requirements.txt
 cp .env.example .env
-# Edit .env and add your MiMo API key
+# Edit .env and add your LLM API key
 ```
 
 ### Run a Quick Diagnosis
@@ -158,17 +158,20 @@ All probe modules are located in `probes/` and are written in PowerShell for dee
 1. **Collect**: Probe modules gather raw system telemetry data
 2. **Normalize**: Logs are parsed, deduplicated, and structured into a unified JSON schema
 3. **Enrich (RAG)**: The normalizer queries a local vector store of Microsoft error codes and known-issue patterns
-4. **Reason**: The enriched context (often 50K-100K tokens) is sent to the MiMo LLM for multi-step reasoning
+4. **Reason**: The enriched context (often 50K-100K tokens) is sent to the configured LLM backend for multi-step reasoning
 5. **Act**: The LLM produces a structured diagnostic report and, optionally, a remediation script
 
-### Why MiMo?
+### LLM Backend
 
-| Requirement | Why MiMo Excels |
-|------------|----------------|
-| **Ultra-long context** | Single diagnostic sessions routinely inject 50K-100K tokens of raw logs. MiMo's 128K+ context window handles this natively. |
-| **Strong reasoning** | Root-cause analysis requires tracing causal chains across kernel events, driver interactions, and hardware telemetry — a task that demands deep logical reasoning. |
-| **Code generation** | Auto-remediation requires generating syntactically correct, safe PowerShell scripts. MiMo's code generation capabilities ensure production-quality output. |
-| **Cost efficiency** | Token Plan pricing makes high-volume log analysis economically viable for continuous monitoring scenarios. |
+OmniDiag AI works with **any OpenAI-compatible API endpoint**. Choose your preferred LLM backend based on your requirements:
+
+| Backend | Recommended For |
+|---------|----------------|
+| **OpenAI GPT-4o** | Best overall reasoning quality for complex multi-causal diagnostics |
+| **DeepSeek V3** | Cost-effective option with strong code generation for auto-remediation scripts |
+| **Qwen 3** | Excellent Chinese documentation support for localized enterprise deployments |
+| **Xiaomi MiMo** | Ultra-long 128K context window, ideal for large-volume log injection |
+| **Local (Ollama)** | Air-gapped environments where data cannot leave the network |
 
 ### Token Consumption Profile
 
@@ -232,7 +235,7 @@ omnidiag-ai/
 ## 🗺️ Roadmap
 
 - [x] Core probe modules (5 probes covering BSOD, WHEA, SMART, drivers, services)
-- [x] Python CLI orchestrator with MiMo API integration
+- [x] Python CLI orchestrator with OpenAI-compatible LLM integration
 - [x] Structured diagnostic report generation
 - [x] Auto-remediation script generation with safety checks
 - [ ] RAG pipeline with Microsoft error code knowledge base
@@ -257,5 +260,5 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ---
 
 <p align="center">
-  <sub>Built with 🧠 by H.Y. • Powered by <a href="https://xiaomimimo.com">Xiaomi MiMo</a></sub>
+  <sub>Built with 🧠 by H.Y.</sub>
 </p>

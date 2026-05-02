@@ -25,7 +25,7 @@ class AgentConfig:
     """Configuration for the AI reasoning agent."""
     api_base: str
     api_key: str
-    model: str = "mimo-v2.5-pro"
+    model: str = "gpt-4o"
     max_tokens: int = 8192
     temperature: float = 0.1
     timeout_seconds: int = 180
@@ -60,7 +60,7 @@ class OmniDiagAgent:
 
     Responsible for:
     1. Assembling the final prompt from normalized probe data + RAG context
-    2. Calling the MiMo LLM API with retry logic
+    2. Calling the LLM API (OpenAI-compatible) with retry logic
     3. Parsing and validating the structured JSON response
     4. Extracting and saving auto-remediation scripts
     """
@@ -114,7 +114,7 @@ Rules:
             return DiagnosticResponse(
                 success=False,
                 diagnosis={},
-                error="API key not configured. Set MIMO_API_KEY in .env file.",
+                error="API key not configured. Set LLM_API_KEY in .env file.",
             )
 
         # Assemble prompt
@@ -153,7 +153,7 @@ Rules:
 
     def _call_with_retry(self, request: DiagnosticRequest,
                           max_retries: int = 3) -> DiagnosticResponse:
-        """Call the MiMo API with exponential backoff retry logic."""
+        """Call the LLM API with exponential backoff retry logic."""
         payload = {
             "model": self.config.model,
             "messages": [
