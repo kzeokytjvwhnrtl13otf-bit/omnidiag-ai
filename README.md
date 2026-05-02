@@ -47,17 +47,17 @@ When enterprise servers or developer workstations encounter **kernel-level crash
 | 🌐 **Multi-Node** | Agent-based distributed collection for server fleet monitoring | 📋 Planned |
 | 📈 **Dashboard** | Real-time system health visualization with trend analysis | 📋 Planned |
 
----
+### Payload & Token Metrics
 
-## 💎 Enterprise Value & Scale
+Diagnostic payloads scale dynamically based on the severity of the system failure. Below are typical context window requirements observed during benchmarking:
 
-OmniDiag AI is not a toy script—it is an **enterprise-grade AIOps platform** designed to consume massive LLM contexts. To convince reviewers of its scale, consider the following metrics:
+| Diagnostic Scenario | Avg. Input Context | Reasoning Output | Typical Frequency |
+|-------------------|-------------------|------------------|-------------------|
+| **Targeted Probe** (`health_check`) | 12K - 15K tokens | ~1K tokens | On-demand |
+| **Deep Audit** (`deep_scan`) | 80K - 120K tokens | ~3K tokens | Incident response |
+| **Fleet Patrol** (500 nodes) | ~50M tokens/day | ~500K tokens/day | Daily cron job |
 
-- **Massive Token Consumption**: A single deep diagnostic session on a crashed server injects raw Minidumps, Windows Event XMLs, and DISM logs. This routinely hits **80,000 to 120,000 tokens per request**.
-- **Fleet-Wide Patrols**: When deployed across a cluster of 500 nodes running daily cron-based health audits, the engine generates an estimated **1.5 Billion tokens per month**.
-- **Commercial Impact**: Every hour of enterprise server downtime costs thousands of dollars. By reducing Mean Time To Resolution (MTTR) from hours to seconds using LLM reasoning, OmniDiag AI delivers immediate ROI.
-
-*This project is the perfect showcase for next-generation, ultra-long context LLMs.*
+*Note: Context windows frequently exceed 100K tokens when injecting raw XML Event Logs and Minidump stack traces. An LLM backend supporting a minimum 128K context window is required for `deep_scan` operations.*
 
 ---
 
@@ -185,23 +185,7 @@ OmniDiag AI works with **any OpenAI-compatible API endpoint**. Choose your prefe
 | **Xiaomi MiMo** | Ultra-long 128K context window, ideal for large-volume log injection |
 | **Local (Ollama)** | Air-gapped environments where data cannot leave the network |
 
-### Token Consumption Profile
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  Typical Token Usage Per Diagnostic Session              │
-├──────────────────────┬──────────────────────────────────┤
-│  Probe Data Input    │  30,000 - 80,000 tokens          │
-│  RAG Context         │  5,000 - 15,000 tokens           │
-│  System Prompt       │  2,000 - 3,000 tokens            │
-│  Chain-of-Thought    │  10,000 - 30,000 tokens          │
-│  Output (Report+Fix) │  3,000 - 8,000 tokens            │
-├──────────────────────┼──────────────────────────────────┤
-│  TOTAL per session   │  50,000 - 136,000 tokens         │
-│  Daily patrol (24x)  │  1.2M - 3.3M tokens              │
-│  Monthly estimate    │  36M - 100M tokens               │
-└──────────────────────┴──────────────────────────────────┘
-```
 
 ---
 
