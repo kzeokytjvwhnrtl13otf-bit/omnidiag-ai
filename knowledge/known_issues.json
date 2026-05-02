@@ -1,52 +1,69 @@
 {
     "known_issues": [
         {
-            "id": "INTEL-VMIN-SHIFT-001",
-            "title": "Intel 13th/14th Gen Raptor Lake CPU Vmin Shift Degradation",
-            "affected": ["i5-13600K", "i5-13600KF", "i7-13700K", "i9-13900K", "i5-14600K", "i7-14700K", "i9-14900K"],
+            "id": "MS-DEFENDER-HIGH-CPU-001",
+            "title": "MsMpEng.exe High CPU Usage During Archive Scanning",
+            "affected": ["Windows Server 2019", "Windows Server 2022", "Windows 11"],
             "symptoms": [
-                "Frequent WHEA_UNCORRECTABLE_ERROR (0x124) BSODs under moderate load",
-                "System instability that worsens over time",
-                "Random reboots during gaming or compilation",
-                "Kernel-Power Event 41 with non-zero BugcheckCode"
+                "MsMpEng.exe consuming 50-100% CPU for extended periods",
+                "System responsiveness severely degraded",
+                "Disk I/O spikes matching Defender process"
             ],
-            "root_cause": "Intel acknowledged elevated voltage requests causing permanent silicon degradation. The CPU requires progressively higher voltage to maintain stability.",
+            "root_cause": "Windows Defender is caught in a scanning loop when encountering deeply nested archive files (.zip, .rar) or large developer directories (like node_modules).",
             "remediation": [
-                "Update to latest BIOS with Intel Default Settings microcode (0x125+)",
-                "Apply Intel Baseline Profile (disables eTVB, limits PL2)",
-                "Set manual Vcore offset +0.02-0.05V as temporary workaround",
-                "Contact Intel for RMA/replacement under extended warranty program"
+                "Add exclusion for specific developer directories",
+                "Limit Defender CPU usage via PowerShell: Set-MpPreference -ScanAvgCPULoadFactor 30",
+                "Schedule full scans during off-peak hours only"
             ],
             "references": [
-                "Intel Community Advisory: intel.com/content/www/us/en/support/articles/000100100",
-                "Intel Baseline Profile Guide"
+                "Microsoft Support: High CPU usage by Windows Defender"
+            ],
+            "severity": "medium",
+            "discovered": "2023-01",
+            "last_verified": "2026-01"
+        },
+        {
+            "id": "CROWDSTRIKE-BSOD-001",
+            "title": "CrowdStrike Falcon Sensor BSOD (PAGE_FAULT_IN_NONPAGED_AREA)",
+            "affected": ["All Windows systems running CrowdStrike Falcon agent version 7.15+"],
+            "symptoms": [
+                "Continuous Blue Screen of Death (BSOD) loops",
+                "Stop code: PAGE_FAULT_IN_NONPAGED_AREA (0x50)",
+                "Faulting module identified as csagent.sys"
+            ],
+            "root_cause": "A malformed channel file update pushed by CrowdStrike caused an out-of-bounds memory read in the csagent.sys kernel driver.",
+            "remediation": [
+                "Boot into Safe Mode or Windows Recovery Environment",
+                "Navigate to C:\\Windows\\System32\\drivers\\CrowdStrike",
+                "Delete files matching 'C-00000291*.sys'",
+                "Reboot normally"
             ],
             "severity": "critical",
             "discovered": "2024-07",
-            "last_verified": "2026-04"
+            "last_verified": "2024-08"
         },
         {
-            "id": "VMWARE-HYPER-V-CONFLICT-001",
-            "title": "VMware Workstation and Hyper-V Coexistence Causing System Freezes",
-            "affected": ["Windows 10/11 with VMware Workstation 17+", "Systems with WSL2 enabled"],
+            "id": "IIS-APPPOOL-RECYCLE-001",
+            "title": "IIS Application Pool Rapid Fail Protection Triggered",
+            "affected": ["Windows Server with IIS 10.0+"],
             "symptoms": [
-                "Complete system freeze (no BSOD, requires hard reset)",
-                "Black screen with cursor after resume from sleep",
-                "High DPC latency spikes when VM is running"
+                "Websites return 503 Service Unavailable",
+                "Event ID 5002 in System Event Log (Application Pool stopped due to Rapid Fail Protection)",
+                "Multiple w3wp.exe crashes (Event ID 1000) within a short timeframe"
             ],
-            "root_cause": "VMware WHP mode (required when Hyper-V is active) introduces additional virtualization overhead that can conflict with certain GPU drivers and cause DPC watchdog violations.",
+            "root_cause": "The w3wp.exe worker process crashed multiple times (default is 5 times within 5 minutes), causing IIS to disable the application pool to protect the system.",
             "remediation": [
-                "Disable Hyper-V: bcdedit /set hypervisorlaunchtype off",
-                "Disable VMware services when not in use",
-                "Update GPU drivers to latest stable version",
-                "Disable Device Guard / Credential Guard if not required"
+                "Inspect Application Event Log for Event ID 1000 to find the faulting module",
+                "Capture a crash dump using DebugDiag or ProcDump",
+                "Temporarily increase the Rapid Fail Protection limit if caused by a known intermittent startup issue",
+                "Restart the App Pool: Start-WebAppPool -Name 'DefaultAppPool'"
             ],
             "severity": "high",
-            "discovered": "2025-03",
+            "discovered": "2020-01",
             "last_verified": "2026-04"
         }
     ],
     "source": "OmniDiag Incident Knowledge Base",
-    "version": "1.1.0",
-    "last_updated": "2026-04-28"
+    "version": "1.2.0",
+    "last_updated": "2026-05-02"
 }
