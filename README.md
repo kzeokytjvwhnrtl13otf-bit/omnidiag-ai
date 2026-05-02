@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/banner.png" alt="OmniDiag AI" width="720" />
+  <img src="docs/assets/banner.png" alt="OmniDiag" width="720" />
 </p>
 
 <h1 align="center">OmniDiag</h1>
@@ -76,12 +76,12 @@ graph TB
     subgraph Core ["⚙️ Core Engine (Python)"]
         COLL[Collector<br/>Structured Log Aggregation]
         NORM[Normalizer<br/>Log Parsing & Tokenization]
-        RAG[RAG Module<br/>Error Code Knowledge Base]
-        AGENT[AI Agent<br/>Reasoning & Decision Loop]
+        RAG[Knowledge Base<br/>Error Code Reference]
+        AGENT[Diagnostic Agent<br/>Reasoning & Decision Loop]
     end
 
     subgraph LLM ["🧠 LLM Backend"]
-        LLM_API[OpenAI-Compatible API<br/>Long Context Reasoning]
+        LLM_API[OpenAI-Compatible API<br/>Long Context Processing]
     end
 
     subgraph Output ["📤 Output"]

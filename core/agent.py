@@ -1,5 +1,5 @@
 """
-OmniDiag AI — AI Reasoning Agent Module
+OmniDiag — Diagnostic Reasoning Module
 
 Orchestrates the full diagnostic pipeline: context assembly,
 LLM API communication, response parsing, and output formatting.

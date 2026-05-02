@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-OmniDiag AI — Full-Stack System Stability Analysis & Autonomous Remediation Engine
+OmniDiag — System Stability Analysis & Automated Remediation Engine
 
 This is the main CLI entry point that orchestrates:
   1. Probe execution (PowerShell diagnostic scripts)
   2. Log normalization and structuring
-  3. AI-powered root-cause analysis via LLM (OpenAI-compatible API)
+  3. LLM-based root-cause analysis (OpenAI-compatible API)
   4. Auto-remediation script generation
 """
 
