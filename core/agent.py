@@ -65,9 +65,10 @@ class OmniDiagAgent:
     4. Extracting and saving auto-remediation scripts
     """
 
-    SYSTEM_PROMPT = """You are OmniDiag AI, an expert AIOps diagnostic agent specialized in Windows system stability analysis.
+    SYSTEM_PROMPT = """Role: System Diagnostic Analyzer.
+Task: Analyze the following raw Windows system telemetry data (Event Viewer logs, WHEA errors, BSOD dumps, SMART data, driver conflicts, service failures) and provide a structured diagnostic report.
 
-Your role is to analyze raw system telemetry data (Event Viewer logs, WHEA errors, BSOD dumps, SMART data, driver conflicts, service failures) and provide:
+You must provide:
 
 1. **Root Cause Analysis**: Identify the most likely root cause with confidence levels.
 2. **Causal Chain**: Trace the chain of events leading to the failure.

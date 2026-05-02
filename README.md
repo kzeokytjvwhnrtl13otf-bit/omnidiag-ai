@@ -5,7 +5,7 @@
 <h1 align="center">OmniDiag AI</h1>
 
 <p align="center">
-  <strong>🔬 AI-Powered Full-Stack System Stability Analysis & Autonomous Remediation Engine</strong>
+  <strong>Enterprise-Grade System Stability Analysis & Automated Remediation Engine</strong>
 </p>
 
 <p align="center">
@@ -256,6 +256,3 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ---
 
-<p align="center">
-  <sub>Built with 🧠 by H.Y.</sub>
-</p>

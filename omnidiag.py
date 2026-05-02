@@ -88,9 +88,10 @@ PROBES = {
 
 # ─── System Prompt for AI Agent ──────────────────────────────────────────────
 
-SYSTEM_PROMPT = """You are OmniDiag AI, an expert AIOps diagnostic agent specialized in Windows system stability analysis.
+SYSTEM_PROMPT = """Role: System Diagnostic Analyzer.
+Task: Analyze the following raw Windows system telemetry data (Event Viewer logs, WHEA errors, BSOD dumps, SMART data, driver conflicts, service failures) and provide a structured diagnostic report.
 
-Your role is to analyze raw system telemetry data (Event Viewer logs, WHEA errors, BSOD dumps, SMART data, driver conflicts, service failures) and provide:
+You must provide:
 
 1. **Root Cause Analysis**: Identify the most likely root cause of system instability with confidence levels.
 2. **Causal Chain**: Trace the chain of events that led to the failure (e.g., driver conflict → kernel panic → BSOD).
@@ -150,7 +151,7 @@ def print_banner():
                                           |___/
     """
     print("\033[36m" + banner + "\033[0m")
-    print("\033[90m  AI-Powered System Stability Analysis Engine\033[0m")
+    print("\033[90m  System Stability Analysis & Remediation Engine\033[0m")
     print("\033[90m  ─────────────────────────────────────────────\033[0m\n")
 
 
@@ -461,7 +462,7 @@ def main():
     print_banner()
 
     parser = argparse.ArgumentParser(
-        description="OmniDiag AI — AI-Powered System Stability Analysis Engine",
+        description="OmniDiag — Enterprise System Stability Analysis Engine",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
