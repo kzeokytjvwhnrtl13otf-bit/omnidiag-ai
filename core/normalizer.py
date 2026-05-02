@@ -171,7 +171,7 @@ class LogNormalizer:
     def _extract_driver_warnings(self, lines: list[str]) -> list[str]:
         warnings = []
         for line in lines:
-            if any(kw in line.lower() for kw in ["driver", "vmci", "warning", "error 219"]):
+            if any(kw in line.lower() for kw in ["driver", "conflict", "warning", "error 219", "failed to load"]):
                 stripped = line.strip()
                 if stripped and len(stripped) > 10:
                     warnings.append(stripped)

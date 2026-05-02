@@ -71,7 +71,7 @@ PROBES = {
     },
     "quick_check": {
         "file": "quick_check.ps1",
-        "description": "Real-time error monitor (last 10 minutes + VMware detection)",
+        "description": "Real-time error monitor (last 10 minutes + high-resource process detection)",
         "tier": "quick",
     },
     "get_events": {

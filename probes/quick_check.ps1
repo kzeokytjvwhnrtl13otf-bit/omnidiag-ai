@@ -20,12 +20,13 @@ try {
 }
 
 Write-Host ""
-Write-Host "=== VMware Processes ===" -ForegroundColor Yellow
-$vmp = Get-Process -Name *vmware* -ErrorAction SilentlyContinue
-if ($vmp) {
-    foreach ($p in $vmp) {
-        Write-Host ("  " + $p.Name + " PID=" + $p.Id) -ForegroundColor Red
+Write-Host "=== High Resource Processes (>200MB RAM) ===" -ForegroundColor Yellow
+$highMem = Get-Process | Where-Object { $_.WorkingSet64 -gt 200MB } | Sort-Object -Property WorkingSet64 -Descending | Select-Object -First 10
+if ($highMem) {
+    foreach ($p in $highMem) {
+        $memMB = [math]::Round($p.WorkingSet64 / 1MB, 1)
+        Write-Host ("  " + $p.Name + " PID=" + $p.Id + " RAM=" + $memMB + "MB CPU=" + [math]::Round($p.CPU, 1) + "s") -ForegroundColor Red
     }
 } else {
-    Write-Host "  No VMware processes running" -ForegroundColor Green
+    Write-Host "  No high-resource processes detected" -ForegroundColor Green
 }

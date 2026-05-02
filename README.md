@@ -144,7 +144,7 @@ All probe modules are located in `probes/` and are written in PowerShell for dee
 | `health_check.ps1` | Disk SMART status, device errors, conflicting software, AV detection, OS image health, recent application errors | ~2-5 KB |
 | `full_diag.ps1` | Kernel-Power 41 events, WHEA errors, BugCheck reports, CPU throttle events, Minidump file inventory, crash timeline | ~5-20 KB |
 | `deep_scan.ps1` | Storage audit, DISM/SFC integrity, failed services, driver conflicts, high-risk filter drivers, crash hotspot analysis | ~3-10 KB |
-| `quick_check.ps1` | Real-time error monitor (last 10 min), VMware process detection | ~1-3 KB |
+| `quick_check.ps1` | Real-time error monitor (last 10 min), high-resource process detection | ~1-3 KB |
 | `get_events.ps1` | Precision time-range event extraction for incident forensics | ~2-50 KB |
 
 > **💡 Why PowerShell?** Unlike Python-based monitoring agents, PowerShell has **native access** to WMI/CIM, Event Viewer, DISM, and kernel-level APIs without any third-party dependencies. This makes our probes zero-dependency and deployable on any Windows machine instantly.
