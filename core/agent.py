@@ -25,7 +25,7 @@ class AgentConfig:
     """Configuration for the AI reasoning agent."""
     api_base: str
     api_key: str
-    model: str = "gpt-5-turbo"
+    model: str = "gpt-4o"
     max_tokens: int = 8192
     temperature: float = 0.1
     timeout_seconds: int = 180

@@ -180,9 +180,9 @@ OmniDiag AI works with **any OpenAI-compatible API endpoint**. Choose your prefe
 | Backend | Recommended For |
 |---------|----------------|
 | **OpenAI GPT-4o** | Best overall reasoning quality for complex multi-causal diagnostics |
-| **DeepSeek V3** | Cost-effective option with strong code generation for auto-remediation scripts |
+| **DeepSeek R1** | Cost-effective option with strong code generation for auto-remediation scripts |
 | **Qwen 3** | Excellent Chinese documentation support for localized enterprise deployments |
-| **Xiaomi MiMo** | Ultra-long 128K context window, ideal for large-volume log injection |
+| **Xiaomi MiMo** | Optimized for long-context reasoning with 128K+ token windows |
 | **Local (Ollama)** | Air-gapped environments where data cannot leave the network |
 
 
@@ -223,6 +223,7 @@ omnidiag-ai/
 │
 └── docs/                    # Documentation & assets
     ├── assets/              # Images, banners
+    ├── examples/            # Sample diagnostic outputs
     └── CONTRIBUTING.md      # Contribution guidelines
 ```
 

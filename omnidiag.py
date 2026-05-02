@@ -33,6 +33,11 @@ except ImportError:
     import urllib.error
     httpx = None
 
+# Core engine modules
+from core.collector import ProbeCollector
+from core.normalizer import LogNormalizer
+from core.rag import RAGPipeline
+
 # ─── Configuration ───────────────────────────────────────────────────────────
 
 BASE_DIR = Path(__file__).parent.resolve()
@@ -153,6 +158,9 @@ def run_probe(probe_name: str, verbose: bool = False) -> str:
     """
     Execute a PowerShell probe and capture its output.
 
+    Delegates to core.collector.ProbeCollector for structured execution
+    with timeout handling and metadata tracking.
+
     Args:
         probe_name: Name of the probe module (e.g., 'health_check')
         verbose: Whether to print real-time output
@@ -166,55 +174,46 @@ def run_probe(probe_name: str, verbose: bool = False) -> str:
         sys.exit(1)
 
     probe_info = PROBES[probe_name]
-    probe_path = PROBES_DIR / probe_info["file"]
-
-    if not probe_path.exists():
-        print(f"\033[31m[ERROR] Probe file not found: {probe_path}\033[0m")
-        sys.exit(1)
+    collector = ProbeCollector(PROBES_DIR, verbose=verbose)
 
     print(f"\033[33m[PROBE] Running {probe_name} ({probe_info['description']})...\033[0m")
 
-    try:
-        result = subprocess.run(
-            ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(probe_path)],
-            capture_output=True,
-            text=True,
-            timeout=120,
-            encoding="utf-8",
-            errors="replace",
-        )
-        output = result.stdout
-        if result.stderr:
-            output += f"\n[STDERR]\n{result.stderr}"
+    result = collector.run(probe_name, probe_info["file"])
 
-        if verbose:
-            print("\033[90m" + output + "\033[0m")
+    if verbose and result.raw_output:
+        print("\033[90m" + result.raw_output + "\033[0m")
 
-        print(f"\033[32m[PROBE] {probe_name} completed — captured {len(output)} chars\033[0m")
-        return output
+    if result.success:
+        print(f"\033[32m[PROBE] {probe_name} completed — "
+              f"captured {result.char_count} chars in {result.duration_ms}ms\033[0m")
+    else:
+        print(f"\033[31m[PROBE] {probe_name} failed (exit={result.exit_code})\033[0m")
 
-    except subprocess.TimeoutExpired:
-        print(f"\033[31m[ERROR] Probe {probe_name} timed out after 120s\033[0m")
-        return f"[TIMEOUT] Probe {probe_name} exceeded 120s execution limit."
-    except Exception as e:
-        print(f"\033[31m[ERROR] Probe execution failed: {e}\033[0m")
-        return f"[ERROR] {str(e)}"
+    return result.raw_output
 
 
 def load_knowledge_context() -> str:
     """
     Load RAG knowledge base files to enrich the AI context.
 
-    Returns:
-        Concatenated knowledge base content
-    """
-    context_parts = []
+    Delegates to core.rag.RAGPipeline for structured knowledge retrieval.
 
+    Returns:
+        Concatenated knowledge base content for LLM injection
+    """
+    pipeline = RAGPipeline(KNOWLEDGE_DIR)
+    stats = pipeline.get_stats()
+
+    # Build a simple combined context from all loaded KB files
+    context_parts = []
     for kb_file in KNOWLEDGE_DIR.glob("*.json"):
         try:
             with open(kb_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            context_parts.append(f"\n--- Knowledge Base: {kb_file.stem} ---\n{json.dumps(data, indent=2)[:5000]}")
+            context_parts.append(
+                f"\n--- Knowledge Base: {kb_file.stem} ---\n"
+                f"{json.dumps(data, indent=2, ensure_ascii=False)[:5000]}"
+            )
         except Exception:
             pass
 

@@ -1,0 +1,64 @@
+{
+  "summary": "Critical memory leak detected in IIS Worker Process (w3wp.exe) leading to Application Pool recycling and intermittent 503 Service Unavailable errors.",
+  "health_rating": "Warning",
+  "confidence": 0.94,
+  "root_causes": [
+    {
+      "cause": "IIS Application Pool 'DefaultAppPool' memory limit exceeded",
+      "evidence": [
+        "Event ID 5117 (WAS): A worker process serving application pool 'DefaultAppPool' has requested a recycle because it reached its private bytes memory limit.",
+        "Performance counter 'Process\\Private Bytes\\w3wp' shows sustained growth from 200MB to 4.5GB over 12 hours",
+        "Multiple 503 HTTP status codes recorded in HTTPERR logs coinciding with recycle events"
+      ],
+      "confidence": 0.96,
+      "severity": "high"
+    },
+    {
+      "cause": "Possible memory leak in newly deployed .NET assembly",
+      "evidence": [
+        "Memory growth rate accelerated significantly after 2026-04-27 deployment",
+        "Event ID 1000 (Application Error) logged for w3wp.exe with exception code 0xe0434352 (CLR exception)"
+      ],
+      "confidence": 0.85,
+      "severity": "medium"
+    }
+  ],
+  "causal_chain": "Deploy of new .NET assembly → unmanaged resource leak → w3wp.exe memory consumption exceeds 4GB → WAS triggers forced recycle → active requests dropped (503 errors) → CPU spikes during application cold start",
+  "risk_factors": [
+    "Customer-facing web applications are experiencing intermittent downtime during recycles",
+    "High CPU utilization during app domain cold starts is impacting other co-hosted services",
+    "Disk space on C:\\ drive dropping due to large memory dump files being generated"
+  ],
+  "remediation": [
+    {
+      "step": 1,
+      "action": "Temporarily increase the Private Memory Limit for the Application Pool to mitigate frequent recycles",
+      "command": "Import-Module WebAdministration; Set-ItemProperty IIS:\\AppPools\\DefaultAppPool -Name recycling.periodicRestart.privateMemory -Value 8388608",
+      "risk": "low",
+      "rollback": "Set-ItemProperty IIS:\\AppPools\\DefaultAppPool -Name recycling.periodicRestart.privateMemory -Value 4194304"
+    },
+    {
+      "step": 2,
+      "action": "Capture a full memory dump of w3wp.exe just before the memory limit is reached for developer analysis",
+      "command": "procdump -ma -m 4000 w3wp.exe C:\\Dumps\\w3wp_high_mem.dmp",
+      "risk": "low",
+      "rollback": "None"
+    },
+    {
+      "step": 3,
+      "action": "Clear old memory dumps to free up critical system drive space",
+      "command": "Remove-Item -Path C:\\Dumps\\*.dmp -Force -ErrorAction SilentlyContinue",
+      "risk": "low",
+      "rollback": "None (data loss intended)"
+    }
+  ],
+  "auto_fix_script": null,
+  "metadata": {
+    "probe": "health_check",
+    "model": "gpt-4o",
+    "generated_at": "2026-04-28T14:30:22+08:00",
+    "input_tokens": 14250,
+    "output_tokens": 985,
+    "total_tokens": 15235
+  }
+}
