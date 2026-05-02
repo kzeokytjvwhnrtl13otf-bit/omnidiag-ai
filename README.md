@@ -2,7 +2,7 @@
   <img src="docs/assets/banner.png" alt="OmniDiag AI" width="720" />
 </p>
 
-<h1 align="center">OmniDiag AI</h1>
+<h1 align="center">OmniDiag</h1>
 
 <p align="center">
   <strong>Enterprise-Grade System Stability Analysis & Automated Remediation Engine</strong>
@@ -13,7 +13,7 @@
   <a href="#architecture">Architecture</a> •
   <a href="#quick-start">Quick Start</a> •
   <a href="#probe-modules">Probe Modules</a> •
-  <a href="#ai-engine">AI Engine</a> •
+  <a href="#diagnostic-engine">Diagnostic Engine</a> •
   <a href="#roadmap">Roadmap</a>
 </p>
 
@@ -31,7 +31,7 @@
 
 When enterprise servers or developer workstations encounter **kernel-level crashes** (BSOD, WHEA errors, driver conflicts, hardware degradation), traditional monitoring tools can only surface error codes. Engineers must then manually sift through **tens of thousands of lines** of Event Viewer logs, Minidump snapshots, and hardware telemetry data — a process that can take hours or even days.
 
-**OmniDiag AI** closes this gap by combining **deep OS-level diagnostic probes** with the **long-context reasoning capabilities of large language models** to deliver automated root-cause analysis and generate executable remediation scripts — in seconds, not hours.
+**OmniDiag** closes this gap by combining **deep OS-level diagnostic probes** with the **long-context reasoning capabilities of large language models** to deliver automated root-cause analysis and generate executable remediation scripts — in seconds, not hours.
 
 ---
 
@@ -40,10 +40,10 @@ When enterprise servers or developer workstations encounter **kernel-level crash
 | Category | Capability | Status |
 |----------|-----------|--------|
 | 🔍 **Probe Engine** | Multi-layer OS telemetry collection (SMART, WHEA, Kernel-Power, WER, CBS, Driver conflicts) | ✅ Production |
-| 🧠 **AI Reasoning** | LLM-powered root-cause analysis with full log context injection (128K+ token windows) | ✅ Production |
-| 🔧 **Auto-Remediation** | AI-generated PowerShell fix scripts with safety validation | ✅ Production |
+| 🧠 **Heuristic Reasoning** | LLM-powered root-cause analysis with full log context injection (128K+ token windows) | ✅ Production |
+| 🔧 **Auto-Remediation** | Automated PowerShell fix scripts with safety validation | ✅ Production |
 | 📊 **RAG Pipeline** | Local knowledge base built from Microsoft error code documentation + historical incidents | 🚧 Beta |
-| 🔄 **Scheduled Patrol** | Cron-based automated health audits with daily AI-generated reports | 🚧 Beta |
+| 🔄 **Scheduled Patrol** | Cron-based automated health audits with daily automated reports | 🚧 Beta |
 | 🌐 **Multi-Node** | Agent-based distributed collection for server fleet monitoring | 📋 Planned |
 | 📈 **Dashboard** | Real-time system health visualization with trend analysis | 📋 Planned |
 
@@ -132,13 +132,13 @@ cp .env.example .env
 ### Run a Quick Diagnosis
 
 ```bash
-# Collect system telemetry and run AI analysis
+# Collect system telemetry and run analysis
 python omnidiag.py diagnose
 
-# Quick health check only (no AI)
+# Quick health check only (no deep reasoning)
 python omnidiag.py collect --probe health_check
 
-# Full BSOD analysis with AI reasoning
+# Full BSOD analysis with heuristic reasoning
 python omnidiag.py diagnose --probe full_diag --verbose
 
 # Deep audit with auto-remediation script generation
@@ -163,7 +163,7 @@ All probe modules are located in `probes/` and are written in PowerShell for dee
 
 ---
 
-## 🧠 AI Engine
+## 🧠 Diagnostic Engine
 
 ### How It Works
 
@@ -175,7 +175,7 @@ All probe modules are located in `probes/` and are written in PowerShell for dee
 
 ### LLM Backend
 
-OmniDiag AI works with **any OpenAI-compatible API endpoint**. Choose your preferred LLM backend based on your requirements:
+OmniDiag works with **any OpenAI-compatible API endpoint**. Choose your preferred LLM backend based on your requirements:
 
 | Backend | Recommended For |
 |---------|----------------|
@@ -210,7 +210,7 @@ omnidiag-ai/
 │   ├── collector.py         # Probe execution & output capture
 │   ├── normalizer.py        # Log parsing & structuring
 │   ├── rag.py               # RAG pipeline (error code KB)
-│   └── agent.py             # AI reasoning agent
+│   └── agent.py             # Diagnostic reasoning agent
 │
 ├── output/                  # Generated reports & fix scripts
 │   ├── reports/             # Diagnostic reports (Markdown/JSON)
