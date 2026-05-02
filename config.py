@@ -26,7 +26,7 @@ class Config:
     # LLM API (OpenAI-compatible endpoint)
     llm_api_base: str = os.getenv("LLM_API_BASE", "https://api.openai.com/v1")
     llm_api_key: str = os.getenv("LLM_API_KEY", "")
-    llm_model: str = os.getenv("LLM_MODEL", "gpt-4o")
+    llm_model: str = os.getenv("LLM_MODEL", "gpt-5-turbo")
     llm_max_tokens: int = int(os.getenv("LLM_MAX_TOKENS", "8192"))
 
     # Probe settings
